@@ -15,7 +15,7 @@ Just put this JSON into this input. You can use `{{placeholders}}` for more info
 
 #### `{{placeholders}}`
 
-For example use `{{GITHUB_ACTOR}}` inside your`slack_json` input to show the username of the person which started the action.
+For example use `{{GITHUB_ACTOR}}` inside your`slack_json` input to show the username of the person who started the action.
 
 You can use all this `{{placeholders}}`:
 

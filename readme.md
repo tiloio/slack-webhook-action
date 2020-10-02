@@ -52,13 +52,13 @@ There are no outputs at the moment.
 
 ## Example usage
 
-Example [.github/workflows/send-notification.yml](./.github/workflows/send-notification.yml) show how to send custom messages in slack.
+Example [.github/workflows/send-notification.yml](./.github/workflows/send-notification.yml) shows how to send custom messages in slack.
 
-Do not forget to add your secrets and modify the inputs:
+Do not forget to add your secret and your custom Slack Block Kit JSON:
 ```yml
 [...]
       - name: Slack notification
-        uses: ./actions/slack
+        uses: tiloio/slack-webhook-action@v1.0.0
         with:
           slack_web_hook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_json: '{

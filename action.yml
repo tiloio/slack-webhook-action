@@ -1,0 +1,12 @@
+name: "Slack webhook channel notifications"
+description: "Lightweight and high modifiable slack notification action which works with webhooks."
+inputs:
+  slack_json:
+    description: "Json for the Slack webhook (see https://app.slack.com/block-kit-builder)."
+    required: true
+  slack_web_hook_url:
+    description: "Webhook URL from Slack for the notification (see https://vw-dilab-projects.slack.com/apps/A0F7XDUAZ-incoming-webhooks)."
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'

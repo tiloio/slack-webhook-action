@@ -1,0 +1,23 @@
+{
+  "name": "slack-webhook-github-action",
+  "version": "1.0.0",
+  "description": "A lightweight and highly customizable GitHub action which notifies you via webhook in your slack channel",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiloio/slack-webhook-action.git"
+  },
+  "keywords": [
+    "slack",
+    "notification"
+  ],
+  "author": "Ti/o",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tiloio/slack-webhook-action/issues"
+  },
+  "homepage": "https://github.com/tiloio/slack-webhook-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6"
+  }
+}

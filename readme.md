@@ -58,7 +58,7 @@ Do not forget to add your secret and your custom Slack Block Kit JSON:
 ```yml
 [...]
       - name: Slack notification
-        uses: tiloio/slack-webhook-action@v1.0.0
+        uses: tiloio/slack-webhook-action@v1.0.1
         with:
           slack_web_hook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_json: '{

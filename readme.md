@@ -61,3 +61,6 @@ We also added some custom parameters which have more information.
 
 And you can use all here listed [environment variables](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables). 
 
+# License
+
+Licensed under [MIT](./LICENSE).

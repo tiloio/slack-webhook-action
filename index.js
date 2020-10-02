@@ -11,6 +11,9 @@ const eventPath = process.env.GITHUB_EVENT_PATH;
 const runId = process.env.GITHUB_RUN_ID;
 
 const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
+const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) => 
+    "\\u" + ("000" + ch.charCodeAt().toString(16)).slice(-4)
+);
 const commitMessage = () => JSON.parse(readEventFile()).commits[0].message;
 
 const commonRegex = (name) => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');
@@ -77,7 +80,7 @@ function sendMessage(data) {
 
 (async () => {
     try {
-        const data = replacer(inputSlackJson);
+        const data = escapeUnicode(replacer(inputSlackJson));
         const result = await sendMessage(data);
 
         if (result !== 'ok')  {

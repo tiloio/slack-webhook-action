@@ -46,7 +46,11 @@ You can use all this `{{placeholders}}`:
 
 More information about the [GitHub placeholders (which are environment variables)](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables). 
 
-## How to use it
+## Outputs
+
+There are no outputs at the moment.
+
+## Example usage
 
 Example `.github/workflows/deployment.yml` show how to send custom messages in slack.
 

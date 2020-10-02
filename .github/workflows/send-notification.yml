@@ -9,10 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Slack notification
-        uses: tiloio/slack-webhook-action@v1.0.0
+        uses: tiloio/slack-webhook-action@v1.0.1
         with:
           slack_web_hook: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_json: '{
@@ -41,7 +39,7 @@ jobs:
                            }'
       - name: Slack failure notification
         if: ${{ failure() }}
-        uses: tiloio/slack-webhook-action@v1.0.0
+        uses: tiloio/slack-webhook-action@v1.0.1
         with:
           slack_web_hook: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_json: '{

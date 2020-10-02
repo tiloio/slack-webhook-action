@@ -52,7 +52,7 @@ There are no outputs at the moment.
 
 ## Example usage
 
-Example `.github/workflows/deployment.yml` show how to send custom messages in slack.
+Example [.github/workflows/send-notification.yml](./.github/workflows/send-notification.yml) show how to send custom messages in slack.
 
 Do not forget to add your secrets and modify the inputs:
 ```yml

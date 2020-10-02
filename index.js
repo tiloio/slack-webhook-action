@@ -11,16 +11,19 @@ const eventPath = process.env.GITHUB_EVENT_PATH;
 const runId = process.env.GITHUB_RUN_ID;
 
 const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
-const commitMessage = () => JSON.parse(readEventFile()).commits[0].message;
+const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) => 
+    "\\u" + ("000" + ch.charCodeAt().toString(16)).slice(-4)
+);
+const commitMessage = () => escapeUnicode(JSON.parse(readEventFile()).commits[0].message);
 
 const commonRegex = (name) => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');
 const envVariable = (name) => ({
     regex: commonRegex(name),
-    data: () => process.env[name]
+    data: () => escapeUnicode(process.env[name])
 });
 const customVariable = (name, data) => ({
     regex: commonRegex(name),
-    data: data
+    data: escapeUnicode(data)
 });
 const listOfVariables = [
     envVariable('GITHUB_WORKFLOW'),

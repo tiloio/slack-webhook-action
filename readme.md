@@ -2,10 +2,53 @@
 
 A GitHub Action which uses [Incoming WebHooks](https://api.slack.com/messaging/webhooks) to send messages to slack channels.
 
+## Inputs
+
+### `slack_web_hook_url`
+
+**Required** The URL from Slack for the [Incoming WebHook](https://api.slack.com/messaging/webhooks).
+
+### `slack_json`
+
+**Required** You can use the [Slack Block Kit Builder](https://app.slack.com/block-kit-builder) to build your own message.
+Just put this JSON into this input. You can use `{{placeholders}}` for more information.
+
+#### `{{placeholders}}`
+
+For example use `{{GITHUB_ACTOR}}` inside your`slack_json` input to show the username of the person which started the action.
+
+You can use all this `{{placeholders}}`:
+
+| Placeholder        | Renders to           | 
+| ------------- |-------------| 
+| CUSTOM_COMMIT_URL | https://github.com/${repositoryName}/commit/${commitSHA} |
+| CUSTOM_AUTHOR_LINK | http://github.com/${authorName} |
+| CUSTOM_AUTHOR_PICTURE | http://github.com/${authorName}.png?size=32 |
+| CUSTOM_SHORT_GITHUB_SHA | process.env.GITHUB_SHA.substring(0, 7) |
+| CUSTOM_COMMIT_MSG | commitMessage |
+| CUSTOM_ACTION_LINK | https://github.com/${repositoryName}/actions/runs/${runId} |
+| GITHUB_WORKFLOW | The name of the workflow. |
+| GITHUB_RUN_ID | 	A unique number for each run within a repository. This number does not change if you re-run the workflow run. |
+| GITHUB_RUN_NUMBER | A unique number for each run of a particular workflow in a repository. This number begins at 1 for the workflow's first run, and increments with each new run. This number does not change if you re-run the workflow run. |
+| GITHUB_ACTION | The unique identifier (id) of the action. |
+| GITHUB_ACTIONS | Always set to true when GitHub Actions is running the workflow. You can use this variable to differentiate when tests are being run locally or by GitHub Actions. |
+| GITHUB_ACTOR | The name of the person or app that initiated the workflow. For example, octocat. |
+| GITHUB_REPOSITORY | The owner and repository name. For example, octocat/Hello-World. |
+| GITHUB_EVENT_NAME | The name of the webhook event that triggered the workflow. |
+| GITHUB_WORKSPACE | The GitHub workspace directory path. The workspace directory contains a subdirectory with a copy of your repository if your workflow uses the actions/checkout action. If you don't use the actions/checkout action, the directory will be empty. For example, /home/runner/work/my-repo-name/my-repo-name. |
+| GITHUB_SHA | The commit SHA that triggered the workflow. For example, ffac537e6cbbf934b08745a378932722df287a53. |
+| GITHUB_REF | The branch or tag ref that triggered the workflow. For example, refs/heads/feature-branch-1. If neither a branch or tag is available for the event type, the variable will not exist. |
+| GITHUB_HEAD_REF | Only set for forked repositories. The branch of the head repository.  |
+| GITHUB_BASE_REF | Only set for forked repositories. The branch of the base repository. |
+| GITHUB_SERVER_URL | Returns the URL of the GitHub server. For example: https://github.com. |
+| GITHUB_API_URL | Returns the API URL. For example: https://api.github.com. |
+| GITHUB_GRAPHQL_URL | Returns the GraphQL API URL. For example: https://api.github.com/graphql. |
+
+More information about the [GitHub placeholders (which are environment variables)](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables). 
+
 ## How to use it
 
 Example `.github/workflows/deployment.yml` show how to send custom messages in slack.
-You can use parameters for all [environment variables](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables) for example `{{GITHUB_ACTOR}}` which renders to the name of the person who started the action.
 
 Do not forget to add your secrets and modify the inputs:
 ```yml
@@ -41,25 +84,6 @@ Do not forget to add your secrets and modify the inputs:
 [...]
 ```
 
-### Build your own message
-
-You can use the [Slack Block Kit Builder](https://app.slack.com/block-kit-builder) to build your own message.
-Just put this JSON into the `slack_json` input parameter.
-
-### Custom parameters
-
-We also added some custom parameters which have more information.
-
-| Placeholder        | Renders to           | 
-| ------------- |-------------| 
-| CUSTOM_COMMIT_URL | https://github.com/${repositoryName}/commit/${commitSHA} |
-| CUSTOM_AUTHOR_LINK | http://github.com/${authorName} |
-| CUSTOM_AUTHOR_PICTURE | http://github.com/${authorName}.png?size=32 |
-| CUSTOM_SHORT_GITHUB_SHA | process.env.GITHUB_SHA.substring(0, 7) |
-| CUSTOM_COMMIT_MSG | commitMessage |
-| CUSTOM_ACTION_LINK | https://github.com/${repositoryName}/actions/runs/${runId} |
-
-And you can use all here listed [environment variables](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables). 
 
 # License
 

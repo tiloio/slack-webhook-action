@@ -23,6 +23,7 @@ const customVariable = (name, data) => ({
     data: data
 });
 const listOfVariables = [
+    envVariable('GITHUB_WORKFLOW'),
     envVariable('GITHUB_RUN_ID'),
     envVariable('GITHUB_RUN_NUMBER'),
     envVariable('GITHUB_ACTION'),

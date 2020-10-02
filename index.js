@@ -14,16 +14,16 @@ const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
 const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) => 
     "\\u" + ("000" + ch.charCodeAt().toString(16)).slice(-4)
 );
-const commitMessage = () => escapeUnicode(JSON.parse(readEventFile()).commits[0].message);
+const commitMessage = () => JSON.parse(readEventFile()).commits[0].message;
 
 const commonRegex = (name) => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');
 const envVariable = (name) => ({
     regex: commonRegex(name),
-    data: () => escapeUnicode(process.env[name])
+    data: () => process.env[name]
 });
 const customVariable = (name, data) => ({
     regex: commonRegex(name),
-    data: escapeUnicode(data)
+    data: data
 });
 const listOfVariables = [
     envVariable('GITHUB_WORKFLOW'),
@@ -80,7 +80,7 @@ function sendMessage(data) {
 
 (async () => {
     try {
-        const data = replacer(inputSlackJson);
+        const data = escapeUnicode(replacer(inputSlackJson));
         const result = await sendMessage(data);
 
         if (result !== 'ok')  {

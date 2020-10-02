@@ -1,4 +1,8 @@
 name: "Slack webhook channel notifications"
+author: "Ti/o"
+branding:
+  icon: 'message-square'  
+  color: 'red'
 description: "Lightweight and high modifiable slack notification action which works with webhooks."
 inputs:
   slack_json:

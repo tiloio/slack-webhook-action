@@ -26,11 +26,21 @@ const slackMention = (slackUserId) => `<@${slackUserId}>`;
 const gitHubNameToSlackMention = (gitHubName) => {
     if (!slackMentionMapping()) return gitHubName;
 
-    core.info(slackMentionMappingFilePath, ' ', gitHubName, ' ', JSON.stringify(slackMentionMapping()))
     const slackMappingObject = slackMentionMapping()[gitHubName];
     if (!slackMappingObject) return gitHubName;
 
     return slackMention(slackMappingObject.slackId);
+}
+const replaceAllMentions = (json) => {
+    if (!slackMentionMapping()) return json;
+
+    let replacedText = json;
+    Object.keys(slackMentionMapping()).filter(user => user.mentions).forEach(user => {
+        user.mentions.forEach(mention => {
+            replacedText = replacedText.replaceAll('@' + mention, slackMention(user.slackId));
+        });
+    });
+    return replacedText;
 }
 
 const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
@@ -104,7 +114,7 @@ function sendMessage(data) {
 
 (async () => {
     try {
-        const data = escapeUnicode(replacer(inputSlackJson));
+        const data = escapeUnicode(replacer(replaceAllMentions(inputSlackJson)));
         const result = await sendMessage(data);
 
         if (result !== 'ok') {

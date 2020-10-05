@@ -35,10 +35,12 @@ const replaceAllMentions = (json) => {
     if (!slackMentionMapping()) return json;
 
     let replacedText = json;
-    Object.keys(slackMentionMapping()).filter(user => user.mentions).forEach(user => {
-        user.mentions.forEach(mention => {
-            replacedText = replacedText.replaceAll('@' + mention, slackMention(user.slackId));
-        });
+    Object.entries(slackMentionMapping()).forEach(([key, user]) => {
+        if (user.mentions) {
+            user.mentions.forEach(mention => {
+                replacedText = replacedText.replaceAll('@' + mention, slackMention(user.slackId));
+            });
+        }
     });
     return replacedText;
 }

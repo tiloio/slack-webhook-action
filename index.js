@@ -114,7 +114,7 @@ function sendMessage(data) {
 
 (async () => {
     try {
-        const data = escapeUnicode(replacer(replaceAllMentions(inputSlackJson)));
+        const data = escapeUnicode(replaceAllMentions(replacer(inputSlackJson)));
         const result = await sendMessage(data);
 
         if (result !== 'ok') {

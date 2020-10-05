@@ -13,9 +13,8 @@ const runId = process.env.GITHUB_RUN_ID;
 
 let slackMentionMappingData = null;
 
-const hasSlackMentionMapping = () => slackMentionMappingFilePath != null
 const slackMentionMapping = () => {
-    if (hasSlackMentionMapping()) return null;
+    if (!slackMentionMappingFilePath) return null;
 
     if (slackMentionMappingData == null) {
         this.slackMentionMapping = JSON.parse(fs.readFileSync(slackMentionMappingFilePath, 'utf8'));
@@ -25,10 +24,10 @@ const slackMentionMapping = () => {
 }
 const slackMention = (slackUserId) => `<@${slackUserId}>`;
 const gitHubNameToSlackMention = (gitHubName) => {
-    if (!hasSlackMentionMapping()) return gitHubName;
+    if (!slackMentionMapping()) return gitHubName;
 
+    core.info(slackMentionMappingFilePath, ' ', gitHubName, ' ', JSON.stringify(slackMentionMapping()))
     const slackMappingObject = slackMentionMapping()[gitHubName];
-
     if (!slackMappingObject) return gitHubName;
 
     return slackMention(slackMappingObject.slackId);

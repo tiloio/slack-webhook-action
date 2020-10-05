@@ -11,20 +11,28 @@ const authorName = process.env.GITHUB_ACTOR;
 const eventPath = process.env.GITHUB_EVENT_PATH;
 const runId = process.env.GITHUB_RUN_ID;
 
-let slackMentionMapping = null;
+let slackMentionMappingData = null;
 
 const hasSlackMentionMapping = () => slackMentionMappingFilePath != null
 const slackMentionMapping = () => {
     if (hasSlackMentionMapping()) return null;
 
-    if (slackMentionMapping == null) {
+    if (slackMentionMappingData == null) {
         this.slackMentionMapping = JSON.parse(fs.readFileSync(slackMentionMappingFilePath, 'utf8'));
     }
 
     return this.slackMentionMapping;
 }
 const slackMention = (slackUserId) => `<@${slackUserId}>`;
-const gitHubNameToSlackMention = (gitHubName) => hasSlackMentionMapping() ? slackMention(slackMentionMapping()[gitHubName].slackId) : gitHubName;
+const gitHubNameToSlackMention = (gitHubName) => {
+    if (!hasSlackMentionMapping()) return gitHubName;
+
+    const slackMappingObject = slackMentionMapping()[gitHubName];
+
+    if (!slackMappingObject) return gitHubName;
+
+    return slackMention(slackMappingObject.slackId);
+}
 
 const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
 const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) =>

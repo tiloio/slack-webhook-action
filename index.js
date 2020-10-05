@@ -11,6 +11,9 @@ const authorName = process.env.GITHUB_ACTOR;
 const eventPath = process.env.GITHUB_EVENT_PATH;
 const runId = process.env.GITHUB_RUN_ID;
 
+
+const escapeRegex = (string) => string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
 let slackMentionMappingData = null;
 
 const slackMentionMapping = () => {
@@ -23,6 +26,7 @@ const slackMentionMapping = () => {
     return this.slackMentionMapping;
 }
 const slackMention = (slackUserId) => `<@${slackUserId}>`;
+const mentionRegex = (mention) => new RegExp(`@${escapeRegex(mention)}`, 'gi');
 const gitHubNameToSlackMention = (gitHubName) => {
     if (!slackMentionMapping()) return gitHubName;
 
@@ -38,7 +42,7 @@ const replaceAllMentions = (json) => {
     Object.entries(slackMentionMapping()).forEach(([key, user]) => {
         if (user.mentions) {
             user.mentions.forEach(mention => {
-                replacedText = replacedText.replaceAll('@' + mention, slackMention(user.slackId));
+                replacedText = replacedText.replace(mentionRegex(mention), slackMention(user.slackId));
             });
         }
     });

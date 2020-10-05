@@ -64,7 +64,7 @@ The file should look like:
 Where
  - **john-smith** is the GitHub Username,
  - **slackId** is the ID of the Slack-Account of this GitHub User (more here: https://api.slack.com/reference/surfaces/formatting#mentioning-users),
- - **mentions** an Array of Strings which are used to replace e.g. `@johnSmith` with a real Slack `@Mention`, it's case sensitive.
+ - **mentions** an Array of Strings which are used to replace e.g. `@johnSmith` with a real Slack `@Mention`, it's case insensitive.
 
 ## Outputs
 

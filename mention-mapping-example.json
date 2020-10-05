@@ -1,0 +1,6 @@
+{
+    "john-smith": {
+        "slackId": "1234465",
+        "mention": ["john" "johnSmith", "john-smith"]
+    }
+}

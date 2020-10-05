@@ -4,14 +4,30 @@ const fs = require('fs');
 
 const inputSlackJson = core.getInput('slack_json');
 const webHookUrl = core.getInput('slack_web_hook_url');
+const slackMentionMappingFilePath = core.getInput('slack_mention_mapping_file');
 const commitSHA = process.env.GITHUB_SHA;
 const repositoryName = process.env.GITHUB_REPOSITORY;
 const authorName = process.env.GITHUB_ACTOR;
 const eventPath = process.env.GITHUB_EVENT_PATH;
 const runId = process.env.GITHUB_RUN_ID;
 
+let slackMentionMapping = null;
+
+const hasSlackMentionMapping = () => slackMentionMappingFilePath != null
+const slackMentionMapping = () => {
+    if (hasSlackMentionMapping()) return null;
+
+    if (slackMentionMapping == null) {
+        this.slackMentionMapping = JSON.parse(fs.readFileSync(slackMentionMappingFilePath, 'utf8'));
+    }
+
+    return this.slackMentionMapping;
+}
+const slackMention = (slackUserId) => `<@${slackUserId}>`;
+const gitHubNameToSlackMention = (gitHubName) => hasSlackMentionMapping() ? slackMention(slackMentionMapping()[gitHubName].slackId) : gitHubName;
+
 const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
-const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) => 
+const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) =>
     "\\u" + ("000" + ch.charCodeAt().toString(16)).slice(-4)
 );
 const commitMessage = () => JSON.parse(readEventFile()).commits[0].message;
@@ -44,10 +60,11 @@ const listOfVariables = [
     envVariable('GITHUB_GRAPHQL_URL'),
     customVariable('CUSTOM_COMMIT_URL', () => `https://github.com/${repositoryName}/commit/${commitSHA}`),
     customVariable('CUSTOM_AUTHOR_LINK', () => `http://github.com/${authorName}`),
-    customVariable('CUSTOM_AUTHOR_PICTURE',  () => `http://github.com/${authorName}.png?size=32`),
+    customVariable('CUSTOM_AUTHOR_PICTURE', () => `http://github.com/${authorName}.png?size=32`),
     customVariable('CUSTOM_SHORT_GITHUB_SHA', () => process.env.GITHUB_SHA.substring(0, 7)),
     customVariable('CUSTOM_COMMIT_MSG', () => commitMessage()),
     customVariable('CUSTOM_ACTION_LINK', () => `https://github.com/${repositoryName}/actions/runs/${runId}`),
+    customVariable('CUSTOM_GITHUB_ACTOR_AS_SLACK', () => gitHubNameToSlackMention(authorName)),
 ];
 
 const replacer = (json) => {
@@ -83,8 +100,8 @@ function sendMessage(data) {
         const data = escapeUnicode(replacer(inputSlackJson));
         const result = await sendMessage(data);
 
-        if (result !== 'ok')  {
-            if (result === 'invalid_payload')  {
+        if (result !== 'ok') {
+            if (result === 'invalid_payload') {
                 core.setFailed('Could not send notification with invalid payload: ' + data);
             } else {
                 core.setFailed('Could not send notification: ' + result);

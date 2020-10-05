@@ -11,6 +11,9 @@ inputs:
   slack_web_hook_url:
     description: "Webhook URL from Slack for the notification (see https://vw-dilab-projects.slack.com/apps/A0F7XDUAZ-incoming-webhooks)."
     required: true
+  slack_mention_mapping_file:
+    description: "An optional mapping file to map GitHub Usernames and @Mentions to real Slack Mentions."
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'

@@ -27,6 +27,7 @@ You can use all this `{{placeholders}}`:
 | CUSTOM_SHORT_GITHUB_SHA | process.env.GITHUB_SHA.substring(0, 7) |
 | CUSTOM_COMMIT_MSG | commitMessage |
 | CUSTOM_ACTION_LINK | https://github.com/${repositoryName}/actions/runs/${runId} |
+| CUSTOM_GITHUB_ACTOR_AS_SLACK | creates an `@UserName` in the Slack message. Needs the `slack_mention_mapping_file` input, otherwise it will return the GitHub username. |
 | GITHUB_WORKFLOW | The name of the workflow. |
 | GITHUB_RUN_ID | 	A unique number for each run within a repository. This number does not change if you re-run the workflow run. |
 | GITHUB_RUN_NUMBER | A unique number for each run of a particular workflow in a repository. This number begins at 1 for the workflow's first run, and increments with each new run. This number does not change if you re-run the workflow run. |
@@ -45,6 +46,25 @@ You can use all this `{{placeholders}}`:
 | GITHUB_GRAPHQL_URL | Returns the GraphQL API URL. For example: https://api.github.com/graphql. |
 
 More information about the [GitHub placeholders (which are environment variables)](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables). 
+
+### `slack_mention_mapping_file`
+
+**Optional** Only needed when you want to map the GitHub usernames to Slack `@mentions`.
+
+The file should look like: 
+```json
+{
+    "john-smith": {
+        "slackId": "1234465",
+        "mentions": ["john" "johnSmith", "john-smith"]
+    }
+}
+```
+
+Where
+ - **john-smith** is the GitHub Username,
+ - **slackId** is the ID of the Slack-Account of this GitHub User (more here: https://api.slack.com/reference/surfaces/formatting#mentioning-users),
+ - **mentions** an Array of Strings which are used to replace e.g. `@johnSmith` with a real Slack `@Mention`, it's case insensitive.
 
 ## Outputs
 

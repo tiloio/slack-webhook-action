@@ -53,7 +53,10 @@ const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
 const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) =>
     "\\u" + ("000" + ch.charCodeAt().toString(16)).slice(-4)
 );
-const commitMessage = () => JSON.parse(readEventFile()).commits[0].message;
+const commitMessage = () => {
+    const event = JSON.parse(readEventFile());
+    return event.commits[event.commits.length - 1].message
+}
 
 const commonRegex = (name) => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');
 const envVariable = (name) => ({

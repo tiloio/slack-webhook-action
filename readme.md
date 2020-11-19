@@ -117,6 +117,20 @@ Do not forget to add your secret and your custom Slack Block Kit JSON:
 
 Your [Incoming WebHook](https://api.slack.com/messaging/webhooks) URL `slack_web_hook_url` is not valid.
 
+## Warnings
+
+### Could not get slack mention mapping!
+
+Your `slack_mention_mapping_file` path is wrong or content is not JSON.
+
+### No commit message found in Event!
+
+The GitHub Event has no commit which could be displayed. The content of the file should be:
+
+> The path of the file with the complete webhook event payload. For example, /github/workflow/event.json.
+
+More information in the [GitHub Actions Docs](https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables) under environment variable `GITHUB_EVENT_PATH`.
+
 # License
 
 Licensed under [MIT](./LICENSE).

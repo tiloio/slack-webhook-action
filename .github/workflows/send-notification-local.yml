@@ -1,4 +1,4 @@
-name: Send Slack notifiactions
+name: Send Slack notifiactions local
 
 on:
   push:

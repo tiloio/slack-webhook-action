@@ -51,7 +51,10 @@ const replaceAllMentions = (json) => {
 const gitHubEvents = () => JSON.parse(fs.readFileSync(eventPath, 'utf8'));
 const commitMessage = () => {
     const event = gitHubEvents();
-    if (!event || !event.commit || !event.commit.length > 0) return '[[no-commit-message-found!]]';
+    if (!event || !event.commit || !event.commit.length > 0) {
+        core.warning('No commit message found in Event:\n' + JSON.stringify(event));
+        return '[[no-commit-message-found!]]';
+    }
     return event.commits[event.commits.length - 1].message
 }
 

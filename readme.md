@@ -49,7 +49,9 @@ More information about the [GitHub placeholders (which are environment variables
 
 ### `slack_mention_mapping_file`
 
-**Optional** Only needed when you want to map the GitHub usernames to Slack `@mentions`.
+**Optional** Path to a file which maps the GitHub Names or `@mentions` to Slack `@mentions` (e.g. `slack_mention_mapping_file: ../.github/slack-name-mapping.json`).
+
+> You need to go one dir up to be in your main directory
 
 The file should look like:
 

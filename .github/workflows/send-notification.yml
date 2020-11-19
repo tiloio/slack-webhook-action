@@ -12,7 +12,7 @@ jobs:
       - name: Slack notification
         uses: tiloio/slack-webhook-action@v1.0.1
         with:
-          slack_web_hook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack_web_hook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_json: '{
                                "username": "{{GITHUB_ACTOR}}",
                                "text": "{{GITHUB_ACTOR}} made some notification",
@@ -41,7 +41,7 @@ jobs:
         if: ${{ failure() }}
         uses: tiloio/slack-webhook-action@v1.0.1
         with:
-          slack_web_hook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack_web_hook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_json: '{
                          "username": "{{GITHUB_ACTOR}}",
                          "text": "{{GITHUB_ACTOR}} made some notification",

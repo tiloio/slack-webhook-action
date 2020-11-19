@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const https = require('https');
 const fs = require('fs');
+const path = require('path');
 
 const inputSlackJson = core.getInput('slack_json');
 const webHookUrl = core.getInput('slack_web_hook_url');
@@ -20,7 +21,12 @@ const slackMentionMapping = () => {
     if (!slackMentionMappingFilePath) return null;
 
     if (slackMentionMappingData == null) {
-        this.slackMentionMapping = JSON.parse(fs.readFileSync(slackMentionMappingFilePath, 'utf8'));
+        try {
+            this.slackMentionMapping = JSON.parse(fs.readFileSync(slackMentionMappingFilePath, 'utf8'));
+        } catch (error) {
+            core.warning('Could not get slack mention mapping! Looking for file at "' + path.resolve(slackMentionMappingFilePath) + '".\n' + error)
+            return null;
+        }
     }
 
     return this.slackMentionMapping;

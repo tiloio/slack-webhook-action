@@ -116,7 +116,7 @@ function sendMessage(data) {
             res.on("error", err => reject(err));
         });
 
-        post_req.on('error', err => reject(err));
+        // post_req.on('error', err => reject(err));
         post_req.write(data);
         post_req.end();
     });

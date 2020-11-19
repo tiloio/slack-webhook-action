@@ -111,6 +111,12 @@ Do not forget to add your secret and your custom Slack Block Kit JSON:
 [...]
 ```
 
+## Errors
+
+### `Could not send notification: invalid_token`
+
+Your [Incoming WebHook](https://api.slack.com/messaging/webhooks) URL `slack_web_hook_url` is not valid.
+
 # License
 
 Licensed under [MIT](./LICENSE).

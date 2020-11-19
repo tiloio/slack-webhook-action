@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Slack notification
-        uses: tiloio/slack-webhook-action@v1.0.1
+        uses: tiloio/slack-webhook-action@v1.1.1
         with:
           slack_web_hook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_mention_mapping_file: ./.github/slack-name-mapping.json
@@ -40,7 +40,7 @@ jobs:
             }'
       - name: Slack failure notification
         if: ${{ failure() }}
-        uses: tiloio/slack-webhook-action@v1.0.1
+        uses: tiloio/slack-webhook-action@v1.1.1
         with:
           slack_web_hook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           slack_json: '{

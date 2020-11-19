@@ -11,7 +11,6 @@ const authorName = process.env.GITHUB_ACTOR;
 const eventPath = process.env.GITHUB_EVENT_PATH;
 const runId = process.env.GITHUB_RUN_ID;
 
-
 const escapeRegex = (string) => string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
 let slackMentionMappingData = null;
@@ -49,22 +48,20 @@ const replaceAllMentions = (json) => {
     return replacedText;
 }
 
-const readEventFile = () => fs.readFileSync(eventPath, 'utf8');
-const escapeUnicode = (str) => str.replace(/[^\0-~]/g, (ch) =>
-    "\\u" + ("000" + ch.charCodeAt().toString(16)).slice(-4)
-);
+const gitHubEvents = () => JSON.parse(fs.readFileSync(eventPath, 'utf8'));
 const commitMessage = () => {
-    const event = JSON.parse(readEventFile());
+    const event = gitHubEvents();
+    if (!event || !event.commit || !event.commit.length > 0) return '[[no-commit-message-found!]]';
     return event.commits[event.commits.length - 1].message
 }
 
-const commonRegex = (name) => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');
-const envVariable = (name) => ({
-    regex: commonRegex(name),
+const tagRegex = name => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');
+const envVariable = name => ({
+    regex: tagRegex(name),
     data: () => process.env[name]
 });
 const customVariable = (name, data) => ({
-    regex: commonRegex(name),
+    regex: tagRegex(name),
     data: data
 });
 const listOfVariables = [
@@ -93,7 +90,11 @@ const listOfVariables = [
     customVariable('CUSTOM_GITHUB_ACTOR_AS_SLACK', () => gitHubNameToSlackMention(authorName)),
 ];
 
-const replacer = (json) => {
+const escapeUnicode = str => str.replace(/[^\0-~]/g, ch =>
+    "\\u" + ("000" + ch.charCodeAt().toString(16)).slice(-4)
+);
+
+const replacer = json => {
     let replacedText = json;
     listOfVariables.forEach(variable => {
         replacedText = replacedText.replace(variable.regex, variable.data())
@@ -101,30 +102,32 @@ const replacer = (json) => {
     return replacedText;
 };
 
-function sendMessage(data) {
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': data.length,
-        }
-    };
+const sendMessage = data =>
+    new Promise((resolve, reject) => {
+        const request = https.request(
+            webHookUrl,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': data.length,
+                }
+            },
+            response => {
+                response.on('data', responseData => resolve(responseData.toString()));
+                response.on("error", error => reject(error));
+            }
+        );
 
-    return new Promise((resolve, reject) => {
-        const post_req = https.request(webHookUrl, options, (res) => {
-            res.on('data', chunk => resolve(chunk.toString()));
-            res.on("error", err => reject(err));
-        });
-
-        // post_req.on('error', err => reject(err));
-        post_req.write(data);
-        post_req.end();
+        request.on('error', error => reject(error));
+        request.write(data);
+        request.end();
     });
-}
 
 (async () => {
     try {
         const data = escapeUnicode(replaceAllMentions(replacer(inputSlackJson)));
+        if (!data) throw 'There is nothing to send! Please check your slack_json parameter!'
         const result = await sendMessage(data);
 
         if (result !== 'ok') {

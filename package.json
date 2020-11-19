@@ -11,6 +11,9 @@
     "slack",
     "notification"
   ],
+  "engines": {
+    "node": ">=12"
+  },
   "author": "Ti/o",
   "license": "MIT",
   "bugs": {

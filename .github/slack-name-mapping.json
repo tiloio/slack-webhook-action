@@ -1,0 +1,17 @@
+{
+  "john-smith": {
+    "slackId": "1234465",
+    "mentions": [
+      "john",
+      "johnSmith",
+      "john-smith"
+    ]
+  },
+  "tiloio": {
+    "slackId": "U01EPRUQX2T",
+    "mentions": [
+      "tilo",
+      "tiloio"
+    ]
+  }
+}

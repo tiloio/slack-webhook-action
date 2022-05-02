@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/tiloio/slack-webhook-action#readme",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.7.0"
   }
 }

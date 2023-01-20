@@ -71,7 +71,7 @@ const commitMessages = () => {
         core.warning('No commit message found in Event!\n' + JSON.stringify(event));
         return '[[no-commit-message-found!]]';
     }
-    return event.commits.map(({ message }) => message).join('\n');
+    return `- ${event.commits.map(({ message }) => message).join('\n- ')}`;
 }
 
 const tagRegex = name => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');

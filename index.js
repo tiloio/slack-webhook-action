@@ -65,6 +65,15 @@ const commitMessage = () => {
     return event.commits[event.commits.length - 1].message
 }
 
+const commitMessages = () => {
+    const event = gitHubEvents();
+    if (!event || !event.commits || !event.commits.length > 0) {
+        core.warning('No commit message found in Event!\n' + JSON.stringify(event));
+        return '[[no-commit-message-found!]]';
+    }
+    return event.commits.map(({ message }) => message).join('\n');
+}
+
 const tagRegex = name => new RegExp(`{{\\s*${name}\\s*}}`, 'gi');
 const envVariable = name => ({
     regex: tagRegex(name),
@@ -96,6 +105,7 @@ const listOfVariables = [
     customVariable('CUSTOM_AUTHOR_PICTURE', () => `http://github.com/${authorName}.png?size=32`),
     customVariable('CUSTOM_SHORT_GITHUB_SHA', () => process.env.GITHUB_SHA.substring(0, 7)),
     customVariable('CUSTOM_COMMIT_MSG', () => commitMessage()),
+    customVariable('CUSTOM_COMMIT_MSGS', () => commitMessages()),
     customVariable('CUSTOM_ACTION_LINK', () => `https://github.com/${repositoryName}/actions/runs/${runId}`),
     customVariable('CUSTOM_GITHUB_ACTOR_AS_SLACK', () => gitHubNameToSlackMention(authorName)),
 ];

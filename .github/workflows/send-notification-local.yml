@@ -1,6 +1,7 @@
 name: Send Slack notifiactions local
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main

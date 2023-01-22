@@ -1,10 +1,8 @@
-name: Tests Slack notifiactions local with sending a message
+name: Tests Slack notifiactions local
 
 on:
   workflow_dispatch:
   pull_request:
-    branches:
-      - main
 
 jobs:
   deploy:

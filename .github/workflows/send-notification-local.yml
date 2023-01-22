@@ -1,6 +1,9 @@
 name: Send Slack notifiactions local
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
